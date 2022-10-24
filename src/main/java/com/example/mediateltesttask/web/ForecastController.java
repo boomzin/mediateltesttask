@@ -1,6 +1,7 @@
 
 package com.example.mediateltesttask.web;
 
+import com.example.mediateltesttask.excaption.AppException;
 import com.example.mediateltesttask.model.CityForecast;
 import com.example.mediateltesttask.service.CityForecastService;
 import com.example.mediateltesttask.to.TemperatureResponse;
@@ -23,7 +24,7 @@ public class ForecastController {
     }
 
     @GetMapping(value = "temperature")
-    public TemperatureResponse getTemp(@RequestParam String cityName, @RequestParam String countryCode) {
+    public TemperatureResponse getTemp(@RequestParam String cityName, @RequestParam String countryCode) throws AppException {
         WeatherApiResponse currentWeather = cityForecastService.getCurrentTemperature(cityName, countryCode);
         CityForecast forecastWithMinTemp = cityForecastService.checkInDbOrLoadNewForecast(currentWeather.getCoord().getLon(), currentWeather.getCoord().getLat());
         return new TemperatureResponse(currentWeather.getMain().getTemp(), forecastWithMinTemp.getTemperature());

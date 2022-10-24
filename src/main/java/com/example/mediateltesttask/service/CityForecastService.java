@@ -1,17 +1,18 @@
 package com.example.mediateltesttask.service;
 
+import com.example.mediateltesttask.excaption.AppException;
 import com.example.mediateltesttask.model.CityForecast;
 import com.example.mediateltesttask.repository.CityForecastRepository;
 import com.example.mediateltesttask.to.ForecastApiResponse;
-import com.example.mediateltesttask.to.ForecastApiResponse.*;
+import com.example.mediateltesttask.to.ForecastApiResponse.Forecast;
 import com.example.mediateltesttask.to.WeatherApiResponse;
 import com.example.mediateltesttask.util.ForecastClient;
 import com.example.mediateltesttask.util.WeatherClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -30,25 +31,17 @@ public class CityForecastService {
         this.forecastClient = forecastClient;
     }
 
-    public WeatherApiResponse getCurrentTemperature(String cityname, String countrtCode) {
+    public WeatherApiResponse getCurrentTemperature(String cityname, String countrtCode) throws AppException {
         Optional<WeatherApiResponse> optionalWeather = weatherClient.fetchCurrentWeather(cityname, countrtCode);
         if (optionalWeather.isPresent()) {
             return optionalWeather.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new AppException("Город не найден");
         }
     }
 
-    public ForecastApiResponse getForecasts(String longitude, String latitude) {
-        Optional<ForecastApiResponse> optionalForecasts = forecastClient.fetchForecasts(longitude, latitude);
-        if (optionalForecasts.isPresent()) {
-            return optionalForecasts.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
 
-    public CityForecast checkInDbOrLoadNewForecast(String longitude, String latitude) {
+    public CityForecast checkInDbOrLoadNewForecast(String longitude, String latitude) throws AppException {
 
         long startAtTomorrow = LocalDate.now().atStartOfDay().plusDays(1).toInstant(ZoneOffset.UTC).getEpochSecond();
         long startAtThirdDay = LocalDate.now().atStartOfDay().plusDays(3).toInstant(ZoneOffset.UTC).getEpochSecond();
@@ -56,7 +49,7 @@ public class CityForecastService {
 
         List<CityForecast> forecastsFromDb = cityForecastRepository.getForecastsByThreeDays(longitude, latitude, startAtTomorrow, endAtThirdDay);
         if (forecastsFromDb.isEmpty()) {
-            ForecastApiResponse forecastApiResponse = forecastClient.fetchForecasts(longitude, latitude).get();
+            ForecastApiResponse forecastApiResponse = forecastClient.fetchForecasts(longitude, latitude).orElseThrow(()-> new AppException("Неверные координаты"));
             List<Forecast> newForecasts = forecastApiResponse.getForecasts();
 
             newForecasts.stream().filter(x -> x.getTimestamp() >= startAtTomorrow).forEach(x -> cityForecastRepository.save(new CityForecast(null, longitude, latitude, x.getTimestamp(), x.getMain().getTemp())));
@@ -68,7 +61,7 @@ public class CityForecastService {
             long latestTimeInBd = forecastLatestInDb.getTimestampUTC();
 
             if (latestTimeInBd < startAtThirdDay) {
-                ForecastApiResponse forecastApiResponse = forecastClient.fetchForecasts(longitude, latitude).get();
+                ForecastApiResponse forecastApiResponse = forecastClient.fetchForecasts(longitude, latitude).orElseThrow(()-> new AppException("Неверные координаты"));
                 List<ForecastApiResponse.Forecast> newForecasts = forecastApiResponse.getForecasts();
 
 
