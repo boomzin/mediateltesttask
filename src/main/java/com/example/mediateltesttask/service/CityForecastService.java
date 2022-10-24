@@ -31,8 +31,8 @@ public class CityForecastService {
         this.forecastClient = forecastClient;
     }
 
-    public WeatherApiResponse getCurrentTemperature(String cityname, String countrtCode) throws AppException {
-        Optional<WeatherApiResponse> optionalWeather = weatherClient.fetchCurrentWeather(cityname, countrtCode);
+    public WeatherApiResponse getCurrentTemperature(String cityName, String countryCode) throws AppException {
+        Optional<WeatherApiResponse> optionalWeather = weatherClient.fetchCurrentWeather(cityName, countryCode);
         if (optionalWeather.isPresent()) {
             return optionalWeather.get();
         } else {
