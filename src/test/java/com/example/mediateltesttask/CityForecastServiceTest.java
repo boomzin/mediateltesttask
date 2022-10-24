@@ -41,6 +41,20 @@ public class CityForecastServiceTest {
         AppException thrown = assertThrows(AppException.class, () -> service.getCurrentTemperature("WRONG", "DATA"));
     }
 
+    @Test()
+    public void shouldThrowExceptionWrongCoordEmptyBd() {
+        Mockito.when(repository.getForecastsByThreeDays("WRONG", "COORD", START_AT_TOMORROW, END_AT_THIRD_DAY)).thenReturn(EMPTY_BD);
+        Mockito.when(forecastClient.fetchForecasts("WRONG", "COORD")).thenReturn(Optional.empty());
+        AppException thrown = assertThrows(AppException.class, () -> service.checkInDbOrLoadNewForecast("WRONG", "COORD"));
+    }
+
+    @Test()
+    public void shouldThrowExceptionWrongCoordHalfBd() {
+        Mockito.when(repository.getForecastsByThreeDays("WRONG", "COORD", START_AT_TOMORROW, END_AT_THIRD_DAY)).thenReturn(HALF_BD);
+        Mockito.when(forecastClient.fetchForecasts("WRONG", "COORD")).thenReturn(Optional.empty());
+        AppException thrown = assertThrows(AppException.class, () -> service.checkInDbOrLoadNewForecast("WRONG", "COORD"));
+    }
+
     @Test
     public void shouldGetWeatherResponse() throws AppException {
         Mockito.when(weatherClient.fetchCurrentWeather("moscow", "ru")).thenReturn(Optional.of(WEATHER_API_RESPONSE));

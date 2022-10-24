@@ -18,7 +18,7 @@ public class TestData {
     static final float MIN_TEMP = 20.33f;
 
     static final String MOSCOW_LON = "37.6156";
-    static final String MOSCOW_LAT = "37.6156";
+    static final String MOSCOW_LAT = "55.7522";
     static final long TODAY = LocalDate.now().toEpochSecond(LocalTime.now(), ZoneOffset.UTC);
     static final long START_AT_TOMORROW = LocalDate.now().atStartOfDay().plusDays(1).toInstant(ZoneOffset.UTC).getEpochSecond();
     static final long START_AT_SECOND_DAY = LocalDate.now().atStartOfDay().plusDays(2).toInstant(ZoneOffset.UTC).getEpochSecond();
