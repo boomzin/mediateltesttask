@@ -1,4 +1,4 @@
-package com.example.mediateltesttask.excaption;
+package com.example.mediateltesttask.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 
 package com.example.mediateltesttask.web;
 
-import com.example.mediateltesttask.excaption.AppException;
+import com.example.mediateltesttask.exception.AppException;
 import com.example.mediateltesttask.model.CityForecast;
 import com.example.mediateltesttask.service.CityForecastService;
 import com.example.mediateltesttask.to.TemperatureResponse;

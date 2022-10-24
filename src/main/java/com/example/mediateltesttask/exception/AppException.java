@@ -1,4 +1,4 @@
-package com.example.mediateltesttask.excaption;
+package com.example.mediateltesttask.exception;
 
 public class AppException extends Exception{
 

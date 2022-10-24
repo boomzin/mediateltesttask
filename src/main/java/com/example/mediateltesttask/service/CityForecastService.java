@@ -1,6 +1,6 @@
 package com.example.mediateltesttask.service;
 
-import com.example.mediateltesttask.excaption.AppException;
+import com.example.mediateltesttask.exception.AppException;
 import com.example.mediateltesttask.model.CityForecast;
 import com.example.mediateltesttask.repository.CityForecastRepository;
 import com.example.mediateltesttask.to.ForecastApiResponse;
