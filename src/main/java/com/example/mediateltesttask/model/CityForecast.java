@@ -19,7 +19,7 @@ public class CityForecast {
     public CityForecast() {
     }
 
-    public CityForecast(Long id, String longitude, String latitude, int timestampUTC, float temperature) {
+    public CityForecast(Long id, String longitude, String latitude, long timestampUTC, float temperature) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
