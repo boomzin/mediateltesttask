@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CityForecastRepository extends JpaRepository<CityForecast, Integer> {
 
-    @Query("SELECT c FROM CityForecast c WHERE c.longitude = :lon AND c.latitude = :lat AND (c.timestampUTC >= :start OR c.timestampUTC < :end)")
+    @Query("SELECT c FROM CityForecast c WHERE c.longitude = :lon AND c.latitude = :lat AND c.timestampUTC >= :start AND c.timestampUTC < :end")
     List<CityForecast> getForecastsByThreeDays(String lon, String lat, long start, long end);
 }
